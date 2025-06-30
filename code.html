@@ -1,0 +1,1679 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ficha de Personagem - Tormenta 20</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        /* --- GLOBAL STYLES & VARIABLES --- */
+        :root {
+            --cor-fundo: #121212;
+            --cor-fundo-sheet: #1e1e1e;
+            --cor-fundo-painel: #2a2a2a;
+            --cor-texto-principal: #e0e0e0;
+            --cor-texto-secundario: #a0a0a0;
+            --cor-ouro: #c5b358;
+            --cor-ouro-hover: #e1d174;
+            --cor-vermelho: #d32f2f;
+            --cor-vermelho-hover: #e53935;
+            --cor-pv: #d32f2f;
+            --cor-pm: #3066be;
+            --font-titulos: 'Cinzel', serif;
+            --font-corpo: 'Lora', serif;
+            --sombra-texto: 1px 1px 2px rgba(0, 0, 0, 0.7);
+            --sombra-caixa: 0 0 10px rgba(0,0,0,0.5), inset 0 0 5px rgba(0,0,0,0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-corpo);
+            background-color: var(--cor-fundo);
+            background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
+            color: var(--cor-texto-principal);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        /* --- MAIN LAYOUT --- */
+        .sheet-container {
+            max-width: 1400px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            gap: 20px;
+            background-color: var(--cor-fundo-sheet);
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 40px rgba(0,0,0,0.8), inset 0 0 15px rgba(0,0,0,0.5);
+            border: 3px solid var(--cor-ouro);
+            border-style: double;
+        }
+
+        .left-pane {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .right-pane {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background-color: rgba(0,0,0,0.1);
+            padding: 20px;
+            border-radius: 4px;
+            border: 1px solid #333;
+        }
+
+        /* --- FORMS & INPUTS --- */
+        label {
+            font-family: var(--font-titulos);
+            font-size: 0.9rem;
+            color: var(--cor-texto-secundario);
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        input[type="text"], input[type="number"], textarea, select {
+            background: rgba(0,0,0,0.2);
+            border: none;
+            border-bottom: 2px solid var(--cor-ouro);
+            color: var(--cor-texto-principal);
+            font-family: var(--font-corpo);
+            font-size: 1rem;
+            padding: 5px;
+            width: 100%;
+            transition: all 0.3s;
+            border-radius: 2px 2px 0 0;
+        }
+        input[type="text"]:focus, input[type="number"]:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--cor-vermelho);
+            background-color: rgba(0,0,0,0.4);
+        }
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .compound-field {
+            display: flex;
+            gap: 15px;
+            align-items: flex-end;
+        }
+        .compound-field .field-group {
+            flex: 1 1 auto;
+        }
+        .compound-field .field-group.fixed-width {
+            flex: 0 0 80px;
+        }
+
+
+        /* --- SHARED PANEL STYLE --- */
+        .character-header, #attributes-section, .status-section {
+            background-color: transparent;
+            border: 1px solid #333;
+            border-radius: 3px;
+            padding: 20px;
+            box-shadow: var(--sombra-caixa);
+        }
+
+        /* --- LEFT PANE STYLES --- */
+        .character-identifiers {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        /* --- XP Section in Header --- */
+        #xp-section {
+            margin-top: 20px;
+        }
+        .xp-inputs {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--cor-ouro);
+            border-radius: 4px;
+            padding: 5px;
+        }
+        .xp-inputs input {
+            flex-grow: 1;
+            border: none;
+            background: transparent;
+            padding: 0;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        .xp-inputs input:focus {
+            background: rgba(255,255,255,0.1);
+        }
+        .xp-inputs span {
+            font-weight: bold;
+            color: var(--cor-texto-secundario);
+        }
+
+        .xp-bar-container {
+            position: relative;
+            height: 20px;
+            background: rgba(0,0,0,0.4);
+            border-radius: 5px;
+            border: 1px solid #555;
+            overflow: hidden;
+            margin-top: 8px;
+            padding: 2px;
+        }
+        #xp-fill {
+            height: 100%;
+            border-radius: 3px;
+            background-color: var(--cor-ouro);
+            width: 0%;
+            transition: width 0.5s ease;
+            box-shadow: inset 0 0 8px rgba(0,0,0,0.5);
+        }
+        .bar-text#xp-text {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 600;
+            font-family: var(--font-titulos);
+            text-shadow: 1px 1px 1px black;
+        }
+
+
+        /* --- ATTRIBUTES SECTION --- */
+        #attributes-section .section-title {
+            text-align: center;
+            font-size: 1.5rem;
+            font-family: var(--font-titulos);
+            font-weight: 700;
+            color: var(--cor-texto-principal);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--cor-ouro);
+            padding-bottom: 10px;
+        }
+
+        .attributes-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .attribute-node {
+            display: grid;
+            grid-template-columns: 60px 1fr 80px;
+            align-items: center;
+            gap: 15px;
+            background-color: rgba(0,0,0,0.1);
+            padding: 8px 15px;
+            border-radius: 3px;
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .attribute-node:hover {
+            border-color: var(--cor-ouro);
+            background-color: rgba(0,0,0,0.2);
+        }
+
+        .attribute-node .modificador {
+            font-size: 2rem;
+            font-weight: 700;
+            font-family: var(--font-titulos);
+            color: var(--cor-vermelho);
+            text-align: center;
+            text-shadow: var(--sombra-texto);
+        }
+
+        .attribute-node label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--cor-texto-principal);
+            text-shadow: var(--sombra-texto);
+        }
+
+        .attribute-node input[type="number"] {
+            width: 100%;
+            font-size: 1.6rem;
+            font-weight: 700;
+            text-align: center;
+            border: 1px solid var(--cor-ouro);
+            border-radius: 4px;
+            padding: 8px 0;
+            background: transparent;
+        }
+        .attribute-node input[type="number"]:focus {
+            border-color: var(--cor-vermelho);
+        }
+
+
+        /* --- STATUS SECTION --- */
+        .vitals-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+        .vitals-grid .status-input {
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-align: center;
+            padding: 8px 0;
+        }
+
+        .status-bar {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            grid-template-areas: "label controls" "bar bar";
+            align-items: center;
+            gap: 5px 10px;
+        }
+        .bar-container {
+            grid-area: bar;
+            position: relative;
+            height: 35px;
+        }
+        .bar-bg {
+            background: rgba(0,0,0,0.4);
+            border-radius: 5px;
+            height: 100%;
+            border: 1px solid var(--cor-ouro);
+            overflow: hidden;
+            padding: 2px;
+        }
+        .bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.5s ease;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        }
+        #pv-fill { background-color: var(--cor-pv); }
+        #pm-fill { background-color: var(--cor-pm); }
+        .bar-text {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: 600;
+            font-family: var(--font-titulos);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.9);
+        }
+        .bar-text input {
+            width: 45px;
+            text-align: center;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            background: transparent;
+            border: none;
+            text-shadow: 1px 1px 1px black;
+        }
+        .bar-text input:focus { background: rgba(0,0,0,0.3); }
+        .bar-text span { margin: 0 5px; }
+
+        .bar-controls { grid-area: controls; display: flex; gap: 4px; }
+        .bar-controls button {
+            background-color: transparent;
+            border: 1px solid var(--cor-ouro);
+            color: var(--cor-ouro);
+            width: 25px; height: 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: bold;
+        }
+        .bar-controls button:hover {
+            background-color: var(--cor-vermelho);
+            border-color: var(--cor-vermelho-hover);
+            color: white;
+        }
+
+        /* --- RIGHT PANE STYLES --- */
+        .actions { display: flex; gap: 10px; }
+        .actions .action-btn {
+            background: transparent;
+            border: 2px solid var(--cor-ouro);
+            color: var(--cor-ouro);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .actions .action-btn:hover {
+            border-color: var(--cor-vermelho);
+            color: var(--cor-vermelho);
+            background: rgba(211, 47, 47, 0.1);
+        }
+        .actions svg { width: 20px; height: 20px; }
+        #importar-input { display: none; }
+
+        /* --- TABS --- */
+        .tabs {
+            display: flex;
+            border-bottom: 3px double var(--cor-ouro);
+            margin-bottom: 10px;
+        }
+        .tab-btn {
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            color: var(--cor-texto-secundario);
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-family: var(--font-titulos);
+            font-weight: 600;
+            position: relative;
+            transition: color 0.3s;
+            margin-bottom: -3px;
+        }
+        .tab-btn:hover {
+            color: var(--cor-texto-principal);
+        }
+        .tab-btn.active {
+            color: var(--cor-vermelho);
+            border-color: var(--cor-vermelho);
+            background: linear-gradient(to top, rgba(211, 47, 47, 0.1), transparent);
+        }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+        .tab-content {
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        /* --- PERICIAS TABLE --- */
+        .pericias-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .pericias-table th, .pericias-table td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #333;
+        }
+        .pericias-table th {
+            font-family: var(--font-titulos);
+            font-weight: 600;
+            color: var(--cor-texto-secundario);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--cor-ouro);
+        }
+        .pericias-table tr:last-child td { border-bottom: none; }
+        .pericias-table tr:hover td { background-color: rgba(255,255,255,0.04); }
+        .pericias-table td:first-child { text-align: left; }
+        .pericias-table .pericia-nome { font-weight: 600; }
+        .pericias-table .pericia-attr { font-size: 0.9rem; color: var(--cor-texto-secundario); margin-left: 5px; }
+        .pericias-table .pericia-total {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--cor-vermelho);
+            font-family: var(--font-titulos);
+        }
+        .pericias-table input {
+            width: 60px;
+            padding: 5px;
+            text-align: center;
+            font-size: 1rem;
+            border-bottom-width: 1px;
+            border-color: #555;
+            background-color: rgba(0,0,0,0.2);
+        }
+
+        /* --- DYNAMIC LISTS (COMBATE, MAGIAS, INVENTARIO) --- */
+        .lista-dinamica-container { display: flex; flex-direction: column; gap: 15px; }
+        .add-btn {
+            width: 100%;
+            background: transparent;
+            border: 2px double var(--cor-ouro);
+            color: var(--cor-ouro);
+            padding: 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: var(--font-titulos);
+            transition: all 0.3s;
+            margin-top: 15px;
+        }
+        .add-btn:hover {
+            border-color: var(--cor-vermelho);
+            color: var(--cor-vermelho);
+            background-color: rgba(211, 47, 47, 0.1);
+        }
+        .item-card {
+            background-color: transparent;
+            border: 1px solid #444;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: var(--sombra-caixa);
+        }
+        .item-card[open] {
+            background: var(--cor-fundo-painel);
+            border-color: var(--cor-ouro);
+        }
+        .item-card summary {
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            align-items: center;
+            gap: 15px;
+            padding: 10px 15px;
+            cursor: pointer;
+            list-style: none;
+            transition: background-color 0.2s;
+        }
+        .item-card summary:hover {
+            background: rgba(255,255,255,0.04);
+        }
+        .item-card summary::-webkit-details-marker { display: none; }
+        .item-card-titulo { font-weight: 600; font-size: 1.1em; }
+        .item-card-subtitulo { color: var(--cor-texto-secundario); font-size: 0.9em; }
+        .item-card .delete-btn {
+            background: none; border: none; color: var(--cor-texto-secundario); font-size: 1.5em;
+            cursor: pointer; transition: color 0.2s; line-height: 1;
+        }
+        .item-card .delete-btn:hover { color: var(--cor-vermelho); }
+        .item-card-content {
+            padding: 20px;
+            border-top: 2px double var(--cor-ouro);
+            background-color: transparent;
+        }
+        .item-card-content .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        /* --- NOTES TAB STYLES --- */
+        .notes-container {
+            display: grid;
+            gap: 20px;
+            grid-template-columns: 1fr;
+        }
+
+        .notes-container textarea {
+            min-height: 120px;
+        }
+
+        /* --- Carga/Weight System --- */
+        #carga-container {
+            background-color: var(--cor-fundo-painel);
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border: 1px solid #333;
+            box-shadow: var(--sombra-caixa);
+        }
+
+        .carga-info {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .carga-info strong {
+            color: var(--cor-texto-principal);
+            font-weight: 600;
+        }
+
+        .carga-bar-wrapper {
+            width: 100%;
+            background-color: rgba(0,0,0,0.4);
+            border-radius: 5px;
+            padding: 2px;
+            border: 1px solid #555;
+            height: 15px;
+            margin-bottom: 10px;
+        }
+
+        #carga-fill {
+            height: 100%;
+            border-radius: 3px;
+            background-color: var(--cor-pm); /* Default/Normal: blue */
+            width: 0%;
+            transition: width 0.5s ease, background-color 0.5s ease;
+        }
+
+        .carga-penalidade-aviso {
+            text-align: center;
+            color: var(--cor-vermelho);
+            font-size: 0.9rem;
+            padding: 8px;
+            background: rgba(211, 47, 47, 0.1);
+            border: 1px solid var(--cor-vermelho);
+            border-radius: 3px;
+            margin-top: 10px;
+        }
+
+        /* --- FOOTER & CREDITS --- */
+        .page-footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .credits-link {
+            background: none;
+            border: none;
+            color: var(--cor-texto-secundario);
+            cursor: pointer;
+            font-family: var(--font-corpo);
+            text-decoration: underline;
+            font-size: 1rem;
+            transition: color 0.3s;
+        }
+
+        .credits-link:hover {
+            color: var(--cor-ouro);
+        }
+
+        /* --- MODAL STYLES --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0s 0.3s;
+        }
+
+        .modal-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-content {
+            background: var(--cor-fundo-sheet);
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: 0 0 40px rgba(0,0,0,0.8), inset 0 0 15px rgba(0,0,0,0.5);
+            border: 3px double var(--cor-ouro);
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            color: var(--cor-texto-principal);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            text-align: center;
+        }
+
+        .modal-overlay.visible .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-content h2 {
+            font-family: var(--font-titulos);
+            color: var(--cor-vermelho);
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            border-bottom: 2px solid var(--cor-ouro);
+            padding-bottom: 10px;
+        }
+
+        .modal-content p {
+            margin-bottom: 15px;
+            line-height: 1.7;
+        }
+
+        .modal-content strong {
+            color: var(--cor-ouro);
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: var(--cor-texto-secundario);
+            cursor: pointer;
+            line-height: 1;
+            transition: color 0.3s;
+        }
+
+        .modal-close-btn:hover {
+            color: var(--cor-vermelho);
+        }
+
+        .credits-category {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #444;
+        }
+
+        .modal-content .credits-category:first-of-type {
+            margin-top: 0;
+            padding-top: 0;
+            border-top: none;
+        }
+
+        .credits-category h3 {
+            font-family: var(--font-titulos);
+            color: var(--cor-texto-principal);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .contributors-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .contributor {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .contributor-avatar {
+            width: 80px;
+            height: 80px;
+            background-color: #333;
+            border-radius: 50%;
+            border: 2px solid var(--cor-ouro);
+            object-fit: cover;
+        }
+
+        .contributor-name {
+            font-weight: 600;
+            color: var(--cor-texto-secundario);
+        }
+
+
+        /* --- RESPONSIVE DESIGN --- */
+        @media (min-width: 900px) {
+            .notes-container {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .notes-container .full-width {
+                grid-column: 1 / -1;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .sheet-container {
+                grid-template-columns: 1fr;
+                padding: 10px;
+            }
+            
+            body {
+                padding: 5px;
+            }
+
+            .right-pane {
+                padding: 10px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                font-size: 14px; /* Adjust base font size */
+            }
+
+            .sheet-container {
+                border-width: 2px;
+            }
+
+            .character-header, #attributes-section, .status-section {
+                padding: 15px;
+            }
+
+            .character-identifiers {
+                grid-template-columns: 1fr; /* Stack identifier fields */
+            }
+
+            .attribute-node {
+                grid-template-columns: 50px 1fr 70px; /* Tighter attribute grid */
+                gap: 10px;
+                padding: 8px 10px;
+            }
+
+            .attribute-node .modificador {
+                font-size: 1.8rem;
+            }
+
+            .attribute-node input[type="number"] {
+                font-size: 1.4rem;
+            }
+            
+            .vitals-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .status-bar {
+                grid-template-areas:
+                    "label label"
+                    "bar bar"
+                    "controls controls";
+                justify-items: center;
+                gap: 10px;
+            }
+
+            .bar-controls {
+                margin-top: 5px;
+            }
+
+            .tabs {
+                overflow-x: auto;
+                -ms-overflow-style: none;  /* IE and Edge */
+                scrollbar-width: none;  /* Firefox */
+            }
+            .tabs::-webkit-scrollbar {
+                display: none; /* Chrome, Safari, and Opera */
+            }
+            
+            .tab-btn {
+                padding: 10px 15px;
+                font-size: 1rem;
+                white-space: nowrap; /* Prevent tab text from wrapping */
+            }
+            
+            #pericias {
+                overflow-x: auto;
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+            #pericias::-webkit-scrollbar {
+                display: none;
+            }
+
+            .pericias-table {
+                min-width: 500px; /* Force scrollbar to appear if needed */
+            }
+
+            .item-card-content .grid-container {
+                grid-template-columns: 1fr; /* Stack fields in item cards */
+            }
+            
+            .modal-content {
+                padding: 20px;
+                width: 95%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .vitals-grid {
+                grid-template-columns: 1fr; /* Stack vitals on very small screens */
+            }
+
+            .item-card summary {
+                grid-template-columns: 1fr auto; /* Stack summary info */
+                grid-template-rows: auto auto;
+                gap: 5px 15px;
+            }
+            
+            .item-card summary > div { /* container for subtitles */
+                grid-column: 1 / 2;
+            }
+            
+            .item-card summary .delete-btn {
+                grid-row: 1 / 3;
+                grid-column: 2 / 3;
+                align-self: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sheet-container">
+        <!-- ===== LEFT PANE ===== -->
+        <aside class="left-pane">
+            <header class="character-header">
+                <div class="character-identifiers">
+                    <div class="field-group">
+                        <label for="nome">Personagem</label>
+                        <input type="text" id="nome" data-field="nome">
+                    </div>
+                    <div class="field-group">
+                        <label for="jogador">Jogador</label>
+                        <input type="text" id="jogador" data-field="jogador">
+                    </div>
+                    <div class="compound-field">
+                        <div class="field-group">
+                            <label for="classe">Classe</label>
+                            <input type="text" id="classe" data-field="classe">
+                        </div>
+                        <div class="field-group fixed-width">
+                            <label for="nivel">Nível</label>
+                            <input type="number" id="nivel" data-field="nivel" value="1">
+                        </div>
+                    </div>
+                    <div class="field-group">
+                        <label for="idade">Idade</label>
+                        <input type="number" id="idade" data-field="idade">
+                    </div>
+                    <div class="field-group">
+                        <label for="raca">Raça</label>
+                        <input type="text" id="raca" data-field="raca">
+                    </div>
+                    <div class="field-group">
+                        <label for="origem">Origem</label>
+                        <input type="text" id="origem" data-field="origem">
+                    </div>
+                     <div class="field-group">
+                        <label for="alinhamento">Alinhamento</label>
+                        <input type="text" id="alinhamento" data-field="alinhamento">
+                    </div>
+                     <div class="field-group">
+                        <label for="dinheiro">Dinheiro (T$)</label>
+                        <input type="text" id="dinheiro" data-field="dinheiro" value="0">
+                    </div>
+                </div>
+                 <div id="xp-section">
+                    <div class="field-group">
+                        <label>Pontos de Experiência (XP)</label>
+                        <div class="xp-inputs">
+                            <input type="number" id="xp_atual" data-field="xp_atual" value="0">
+                            <span>/</span>
+                            <input type="number" id="xp_prox_nivel" data-field="xp_prox_nivel" value="1000">
+                        </div>
+                    </div>
+                    <div class="xp-bar-container">
+                         <div id="xp-fill" class="bar-fill"></div>
+                         <div id="xp-text" class="bar-text">0 / 1000 XP</div>
+                    </div>
+                </div>
+            </header>
+
+            <section id="attributes-section">
+                <h2 class="section-title">Atributos</h2>
+                <div class="attributes-list">
+                    <div class="attribute-node" data-attr="for">
+                        <span class="modificador" id="mod-forca">+0</span>
+                        <label for="forca">Força</label>
+                        <input type="number" id="forca" value="10" data-field="forca">
+                    </div>
+                    <div class="attribute-node" data-attr="des">
+                        <span class="modificador" id="mod-destreza">+0</span>
+                        <label for="destreza">Destreza</label>
+                        <input type="number" id="destreza" value="10" data-field="destreza">
+                    </div>
+                    <div class="attribute-node" data-attr="con">
+                        <span class="modificador" id="mod-constituicao">+0</span>
+                        <label for="constituicao">Constituição</label>
+                        <input type="number" id="constituicao" value="10" data-field="constituicao">
+                    </div>
+                    <div class="attribute-node" data-attr="int">
+                        <span class="modificador" id="mod-inteligencia">+0</span>
+                        <label for="inteligencia">Inteligência</label>
+                        <input type="number" id="inteligencia" value="10" data-field="inteligencia">
+                    </div>
+                    <div class="attribute-node" data-attr="sab">
+                        <span class="modificador" id="mod-sabedoria">+0</span>
+                        <label for="sabedoria">Sabedoria</label>
+                        <input type="number" id="sabedoria" value="10" data-field="sabedoria">
+                    </div>
+                    <div class="attribute-node" data-attr="car">
+                        <span class="modificador" id="mod-carisma">+0</span>
+                        <label for="carisma">Carisma</label>
+                        <input type="number" id="carisma" value="10" data-field="carisma">
+                    </div>
+                </div>
+            </section>
+
+            <section class="status-section">
+                <div class="vitals-grid">
+                     <div class="field-group">
+                        <label for="divindade">Divindade</label>
+                        <input type="text" id="divindade" value="" data-field="divindade" class="status-input">
+                    </div>
+                    <div class="field-group">
+                        <label for="defesa">Defesa</label>
+                        <input type="number" id="defesa" value="10" data-field="defesa" class="status-input">
+                    </div>
+                     <div class="field-group">
+                        <label for="deslocamento">Deslocamento</label>
+                        <input type="text" id="deslocamento" value="9m" data-field="deslocamento" class="status-input">
+                    </div>
+                </div>
+
+                <div class="status-bar" id="pv-status">
+                    <label>Pontos de Vida</label>
+                    <div class="bar-container">
+                        <div class="bar-bg">
+                            <div id="pv-fill" class="bar-fill"></div>
+                        </div>
+                        <div class="bar-text">
+                            <input type="number" id="pv_atuais" value="10" data-field="pv_atuais">
+                            <span>/</span>
+                            <input type="number" id="pv_max" value="10" data-field="pv_max">
+                        </div>
+                    </div>
+                    <div class="bar-controls">
+                        <button data-op="zero" data-stat="pv">&laquo;</button>
+                        <button data-op="dec" data-stat="pv">&lsaquo;</button>
+                        <button data-op="inc" data-stat="pv">&rsaquo;</button>
+                        <button data-op="max" data-stat="pv">&raquo;</button>
+                    </div>
+                </div>
+
+                <div class="status-bar" id="pm-status">
+                    <label>Pontos de Mana</label>
+                    <div class="bar-container">
+                        <div class="bar-bg">
+                            <div id="pm-fill" class="bar-fill"></div>
+                        </div>
+                        <div class="bar-text">
+                            <input type="number" id="pm_atuais" value="5" data-field="pm_atuais">
+                            <span>/</span>
+                            <input type="number" id="pm_max" value="5" data-field="pm_max">
+                        </div>
+                    </div>
+                    <div class="bar-controls">
+                        <button data-op="zero" data-stat="pm">&laquo;</button>
+                        <button data-op="dec" data-stat="pm">&lsaquo;</button>
+                        <button data-op="inc" data-stat="pm">&rsaquo;</button>
+                        <button data-op="max" data-stat="pm">&raquo;</button>
+                    </div>
+                </div>
+            </section>
+        </aside>
+
+        <!-- ===== RIGHT PANE ===== -->
+        <main class="right-pane">
+            <header class="right-header">
+                <div class="actions">
+                    <button id="importar-btn" class="action-btn" title="Importar Ficha">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                    </button>
+                    <button id="exportar-btn" class="action-btn" title="Exportar Ficha">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5z"/></svg>
+                    </button>
+                    <input type="file" id="importar-input" accept=".json">
+                </div>
+            </header>
+            
+            <nav class="tabs">
+                <button class="tab-btn active" data-tab="pericias">Perícias</button>
+                <button class="tab-btn" data-tab="notas">Notas</button>
+                <button class="tab-btn" data-tab="habilidades">Habilidades e Poderes</button>
+                <button class="tab-btn" data-tab="combate">Combate</button>
+                <button class="tab-btn" data-tab="magias">Magias</button>
+                <button class="tab-btn" data-tab="inventario">Inventário</button>
+            </nav>
+
+            <div class="tab-content">
+                <div id="pericias" class="tab-panel active">
+                    <table class="pericias-table">
+                        <thead>
+                            <tr>
+                                <th>Perícia</th>
+                                <th>Total</th>
+                                <th>Bônus Attr.</th>
+                                <th>Treino</th>
+                                <th>Outros</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista-pericias">
+                            <!-- Gerado por JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="notas" class="tab-panel">
+                    <div class="notes-container">
+                        <div class="field-group full-width">
+                            <label for="anotacoes">Anotações</label>
+                            <textarea id="anotacoes" data-field="anotacoes" rows="8"></textarea>
+                        </div>
+                        <div class="field-group">
+                            <label for="aparencia">Aparência</label>
+                            <textarea id="aparencia" data-field="aparencia" rows="6"></textarea>
+                        </div>
+                        <div class="field-group">
+                            <label for="personalidade">Personalidade</label>
+                            <textarea id="personalidade" data-field="personalidade" rows="6"></textarea>
+                        </div>
+                        <div class="field-group full-width">
+                            <label for="historico">Histórico</label>
+                            <textarea id="historico" data-field="historico" rows="8"></textarea>
+                        </div>
+                        <div class="field-group full-width">
+                            <label for="objetivo">Objetivo</label>
+                            <textarea id="objetivo" data-field="objetivo" rows="4"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="habilidades" class="tab-panel">
+                    <div id="lista-habilidades" class="lista-dinamica-container"></div>
+                    <button id="add-habilidade-btn" class="add-btn">+ Nova Habilidade/Poder</button>
+                </div>
+
+                <div id="combate" class="tab-panel">
+                    <div id="lista-ataques" class="lista-dinamica-container"></div>
+                    <button id="add-ataque-btn" class="add-btn">+ Novo Ataque</button>
+                </div>
+
+                <div id="magias" class="tab-panel">
+                    <div id="lista-magias" class="lista-dinamica-container"></div>
+                    <button id="add-magia-btn" class="add-btn">+ Nova Magia</button>
+                </div>
+
+                <div id="inventario" class="tab-panel">
+                    <div id="carga-container">
+                        <div class="carga-info">
+                            <span>Carga Atual: <strong id="carga-atual">0kg</strong></span>
+                            <span>Carga Normal: <strong id="carga-normal">30kg</strong></span>
+                            <span>Carga Máxima: <strong id="carga-maxima">100kg</strong></span>
+                        </div>
+                        <div class="carga-bar-wrapper">
+                            <div id="carga-fill" class="carga-fill"></div>
+                        </div>
+                        <div id="carga-penalidade" class="carga-penalidade-aviso" style="display: none;">
+                            <strong>Carga Pesada:</strong> Penalidade de Armadura –2, Deslocamento –3m.
+                        </div>
+                    </div>
+                    <div id="lista-inventario" class="lista-dinamica-container"></div>
+                    <button id="add-item-btn" class="add-btn">+ Novo Item</button>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <div id="credits-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close-btn" aria-label="Fechar Créditos">&times;</button>
+            <h2>Créditos</h2>
+            <div class="credits-category">
+                <h3>Criador</h3>
+                <div class="contributors-container">
+                    <div class="contributor">
+                        <img src="https://static.wikia.nocookie.net/deltarune/images/d/d4/Berdly_face.png/revision/latest/scale-to-width/360?cb=20210928112118" class="contributor-avatar" alt="Avatar de Riky">
+                        <span class="contributor-name">Riky</span>
+                    </div>
+                </div>
+            </div>
+            <div class="credits-category">
+                <h3>Beta Testers</h3>
+                <div class="contributors-container">
+                    <div class="contributor">
+                        <img src="data:image/webp;base64,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" class="contributor-avatar" alt="Avatar de OkehMauree">
+                        <span class="contributor-name">OkehMauree</span>
+                    </div>
+                    <div class="contributor">
+                        <img src="data:image/webp;base64,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" class="contributor-avatar" alt="Avatar de L0st">
+                        <span class="contributor-name">L0st</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="page-footer">
+        <button id="credits-btn" class="credits-link">Créditos</button>
+    </footer>
+
+    <script>
+        // --- MAPS AND DEFINITIONS ---
+        const periciasBase = [
+            { nome: 'Acrobacia', attr: 'des' }, { nome: 'Adestramento', attr: 'car' }, { nome: 'Atletismo', attr: 'for' },
+            { nome: 'Atuação', attr: 'car' }, { nome: 'Cavalgar', attr: 'des' }, { nome: 'Conhecimento', attr: 'int' },
+            { nome: 'Cura', attr: 'sab' }, { nome: 'Diplomacia', attr: 'car' }, { nome: 'Enganação', attr: 'car' },
+            { nome: 'Fortitude', attr: 'con' }, { nome: 'Furtividade', attr: 'des' }, { nome: 'Guerra', attr: 'int' },
+            { nome: 'Iniciativa', attr: 'des' }, { nome: 'Intimidação', attr: 'car' }, { nome: 'Intuição', attr: 'sab' },
+            { nome: 'Investigação', attr: 'int' }, { nome: 'Jogatina', attr: 'car' }, { nome: 'Ladinagem', attr: 'des' },
+            { nome: 'Luta', attr: 'for' }, { nome: 'Misticismo', attr: 'int' }, { nome: 'Nobreza', attr: 'int' },
+            { nome: 'Ofício', attr: 'int' }, { nome: 'Percepção', attr: 'sab' }, { nome: 'Pilotagem', attr: 'des' },
+            { nome: 'Pontaria', attr: 'des' }, { nome: 'Reflexos', attr: 'des' }, { nome: 'Religião', attr: 'sab' },
+            { nome: 'Sobrevivência', attr: 'sab' }, { nome: 'Vontade', attr: 'sab' }
+        ];
+        const attrMap = { 'for': 'forca', 'des': 'destreza', 'con': 'constituicao', 'int': 'inteligencia', 'sab': 'sabedoria', 'car': 'carisma' };
+
+        // --- CALCULATION AND UPDATE FUNCTIONS ---
+        function calcularModificador(valor) { return Math.floor((valor - 10) / 2); }
+
+        function atualizarTotaisPericias() {
+            periciasBase.forEach(pericia => {
+                const pId = pericia.nome.toLowerCase().replace(/\s/g, '-');
+                const totalSpan = document.getElementById(`total-${pId}`);
+                const bonusAttrSpan = document.getElementById(`bonus-${pId}`);
+                const treinoInput = document.getElementById(`treino-${pId}`);
+                const outrosInput = document.getElementById(`outros-${pId}`);
+                const modAttrSpan = document.getElementById(`mod-${attrMap[pericia.attr]}`);
+
+                if (totalSpan && treinoInput && outrosInput && modAttrSpan && bonusAttrSpan) {
+                    const modAttr = parseInt(modAttrSpan.textContent || '0') || 0;
+                    const treinoVal = parseInt(treinoInput.value) || 0;
+                    const outros = parseInt(outrosInput.value) || 0;
+                    
+                    bonusAttrSpan.textContent = modAttr >= 0 ? `+${modAttr}` : `${modAttr}`;
+                    const total = modAttr + treinoVal + outros;
+                    totalSpan.textContent = total >= 0 ? `+${total}` : `${total}`;
+                }
+            });
+        }
+
+        function atualizarModificadores() {
+            document.querySelectorAll('.attribute-node').forEach(node => {
+                const input = node.querySelector('input[type="number"]');
+                const modDisplay = node.querySelector('.modificador');
+                if (input && modDisplay) {
+                    const mod = calcularModificador(parseInt(input.value) || 10);
+                    modDisplay.textContent = mod >= 0 ? `+${mod}` : `${mod}`;
+                }
+            });
+            atualizarTotaisPericias();
+            atualizarCarga();
+        }
+
+        function atualizarBarrasStatus() {
+            const pvAtuais = parseInt(document.getElementById('pv_atuais').value) || 0;
+            const pvMax = parseInt(document.getElementById('pv_max').value) || 1;
+            const pmAtuais = parseInt(document.getElementById('pm_atuais').value) || 0;
+            const pmMax = parseInt(document.getElementById('pm_max').value) || 1;
+
+            const pvPercent = Math.max(0, Math.min(100, (pvAtuais / pvMax) * 100));
+            const pmPercent = Math.max(0, Math.min(100, (pmAtuais / pmMax) * 100));
+
+            document.getElementById('pv-fill').style.width = `${pvPercent}%`;
+            document.getElementById('pm-fill').style.width = `${pmPercent}%`;
+        }
+
+        function atualizarBarraXP() {
+            const xpAtuaisInput = document.getElementById('xp_atual');
+            const xpProxNivelInput = document.getElementById('xp_prox_nivel');
+            const nivelInput = document.getElementById('nivel');
+            
+            if (!xpAtuaisInput || !xpProxNivelInput || !nivelInput) return;
+
+            let xpAtuais = parseInt(xpAtuaisInput.value) || 0;
+            let xpProxNivel = parseInt(xpProxNivelInput.value) || 1000;
+            let nivel = parseInt(nivelInput.value) || 1;
+
+            // Loop para lidar com múltiplos "level ups" de um único ganho de XP
+            while (xpAtuais >= xpProxNivel && xpProxNivel > 0) {
+                nivel++;
+                xpAtuais -= xpProxNivel; // Carrega o XP excedente
+                // Progressão de XP em T20: XP para ir do nível L para L+1 é L * 1000
+                xpProxNivel = (nivel -1) * 1000 +1000;
+            }
+
+            // Atualiza os campos do formulário com os novos valores após a verificação de level-up
+            nivelInput.value = `${nivel}`;
+            xpAtuaisInput.value = `${xpAtuais}`;
+            xpProxNivelInput.value = `${xpProxNivel}`;
+            
+            // Agora, atualize a barra com os valores finais
+            const xpParaBarra = xpProxNivel > 0 ? xpProxNivel : 1;
+            const xpPercent = Math.max(0, Math.min(100, (xpAtuais / xpParaBarra) * 100));
+
+            document.getElementById('xp-fill').style.width = `${xpPercent}%`;
+            document.getElementById('xp-text').textContent = `${xpAtuais} / ${xpProxNivel} XP`;
+        }
+
+        function atualizarCarga() {
+            const forcaInput = document.getElementById('forca');
+            if (!forcaInput) return;
+            const forca = parseInt(forcaInput.value || '10');
+
+            const capacidadeNormal = forca * 3;
+            const capacidadeMaxima = forca * 10;
+
+            document.getElementById('carga-normal').textContent = `${capacidadeNormal}kg`;
+            document.getElementById('carga-maxima').textContent = `${capacidadeMaxima}kg`;
+
+            let pesoTotal = 0;
+            document.querySelectorAll('#lista-inventario .item-card').forEach(card => {
+                const pesoInput = card.querySelector('input[data-field="peso"]');
+                if (pesoInput) {
+                    pesoTotal += parseFloat(pesoInput.value) || 0;
+                }
+            });
+
+            document.getElementById('carga-atual').textContent = `${pesoTotal.toFixed(1)}kg`;
+
+            const cargaFill = document.getElementById('carga-fill');
+            const percent = Math.min(100, (pesoTotal / capacidadeMaxima) * 100);
+            cargaFill.style.width = `${percent > 0 ? percent : 0}%`;
+
+            const defesaInput = document.getElementById('defesa');
+            const deslocamentoInput = document.getElementById('deslocamento');
+            const penalidadeAviso = document.getElementById('carga-penalidade');
+            
+            if (!defesaInput || !deslocamentoInput || !penalidadeAviso) return;
+
+            if (!defesaInput.dataset.baseValue) {
+                defesaInput.dataset.baseValue = defesaInput.value;
+            }
+            if (!deslocamentoInput.dataset.baseValue) {
+                deslocamentoInput.dataset.baseValue = deslocamentoInput.value;
+            }
+
+            const baseDefesa = parseInt(defesaInput.dataset.baseValue);
+            const baseDeslocamentoRaw = deslocamentoInput.dataset.baseValue;
+            const baseDeslocamentoVal = parseInt(baseDeslocamentoRaw.replace(/[^0-9.]/g, '')) || 0;
+            const baseDeslocamentoUnit = baseDeslocamentoRaw.replace(/[0-9.]/g, '') || 'm';
+
+            if (pesoTotal > capacidadeMaxima) {
+                cargaFill.style.backgroundColor = 'var(--cor-vermelho)';
+                penalidadeAviso.innerHTML = '<strong>SOBRECARGA MÁXIMA!</strong> Não é possível carregar mais peso.';
+                penalidadeAviso.style.display = 'block';
+                defesaInput.value = `${baseDefesa - 2}`;
+                deslocamentoInput.value = `${Math.max(0, baseDeslocamentoVal - 3)}${baseDeslocamentoUnit}`;
+            } else if (pesoTotal > capacidadeNormal) {
+                cargaFill.style.backgroundColor = 'var(--cor-ouro)';
+                penalidadeAviso.innerHTML = '<strong>Carga Pesada:</strong> Penalidade de Armadura –2, Deslocamento –3m.';
+                penalidadeAviso.style.display = 'block';
+                defesaInput.value = `${baseDefesa - 2}`;
+                deslocamentoInput.value = `${Math.max(0, baseDeslocamentoVal - 3)}${baseDeslocamentoUnit}`;
+            } else {
+                cargaFill.style.backgroundColor = 'var(--cor-pm)';
+                penalidadeAviso.style.display = 'none';
+                defesaInput.value = `${baseDefesa}`;
+                deslocamentoInput.value = baseDeslocamentoRaw;
+            }
+        }
+
+
+        // --- DYNAMIC CONTENT GENERATION ---
+        function gerarTabelaPericias() {
+            const tbodyPericias = document.getElementById('lista-pericias');
+            if (!tbodyPericias) return;
+            tbodyPericias.innerHTML = '';
+            periciasBase.forEach(pericia => {
+                const pId = pericia.nome.toLowerCase().replace(/\s/g, '-');
+                const attrAbrev = pericia.attr.toUpperCase();
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>
+                        <span class="pericia-nome">${pericia.nome}</span>
+                        <span class="pericia-attr">(${attrAbrev})</span>
+                    </td>
+                    <td><span class="pericia-total" id="total-${pId}">+0</span></td>
+                    <td><span id="bonus-${pId}">+0</span></td>
+                    <td><input type="number" id="treino-${pId}" value="0" data-field="treino-${pId}"></td>
+                    <td><input type="number" id="outros-${pId}" value="0" data-field="outros-${pId}"></td>
+                `;
+                tbodyPericias.appendChild(tr);
+            });
+        }
+
+        function criarItemDinamico(tipo, containerId, data = {}) {
+            const id = `${tipo}-${Date.now()}`;
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            const card = document.createElement('details');
+            card.className = 'item-card';
+            card.id = id;
+            card.setAttribute('data-type', tipo);
+            card.open = Object.keys(data).length === 0;
+
+            let summaryHTML = '';
+            let contentHTML = '';
+
+            switch (tipo) {
+                case 'ataque':
+                    summaryHTML = `
+                        <span class="item-card-titulo">${data.nome || 'Novo Ataque'}</span>
+                        <div>
+                            <span class="item-card-subtitulo">Dano: ${data.dano || 'N/A'}</span>
+                            <span class="item-card-subtitulo">Crítico: ${data.critico || 'N/A'}</span>
+                        </div>
+                        <button class="delete-btn" aria-label="Remover Ataque">&times;</button>
+                    `;
+                    contentHTML = `
+                        <div class="grid-container">
+                            <div class="field-group"><label>Nome do Ataque</label><input type="text" data-field="nome" value="${data.nome || ''}"></div>
+                            <div class="field-group"><label>Teste de Ataque</label><input type="text" data-field="teste" value="${data.teste || ''}"></div>
+                            <div class="field-group"><label>Dano</label><input type="text" data-field="dano" value="${data.dano || ''}"></div>
+                            <div class="field-group"><label>Crítico</label><input type="text" data-field="critico" value="${data.critico || ''}"></div>
+                        </div>
+                        <div style="margin-top:15px;"><div class="field-group"><label>Alcance/Tipo</label><input type="text" data-field="alcance" value="${data.alcance || ''}"></div></div>
+                    `;
+                    break;
+                case 'magia':
+                    summaryHTML = `
+                        <span class="item-card-titulo">${data.nome || 'Nova Magia'}</span>
+                        <span class="item-card-subtitulo">Custo: ${data.custo || 'N/A'} PM</span>
+                        <button class="delete-btn" aria-label="Remover Magia">&times;</button>
+                    `;
+                    contentHTML = `
+                        <div class="grid-container">
+                            <div class="field-group"><label>Nome da Magia</label><input type="text" data-field="nome" value="${data.nome || ''}"></div>
+                            <div class="field-group"><label>Custo de PM</label><input type="text" data-field="custo" value="${data.custo || ''}"></div>
+                            <div class="field-group"><label>Execução</label><input type="text" data-field="execucao" value="${data.execucao || ''}"></div>
+                            <div class="field-group"><label>Alcance</label><input type="text" data-field="alcance" value="${data.alcance || ''}"></div>
+                        </div>
+                        <div style="margin-top:15px;"><div class="field-group"><label>Descrição/Efeito</label><textarea data-field="descricao">${data.descricao || ''}</textarea></div></div>
+                    `;
+                    break;
+                case 'item':
+                    summaryHTML = `
+                        <span class="item-card-titulo">${data.nome || 'Novo Item'}</span>
+                        <span class="item-card-subtitulo">Peso: ${data.peso || 0}kg</span>
+                        <button class="delete-btn" aria-label="Remover Item">&times;</button>
+                    `;
+                    contentHTML = `
+                        <div class="grid-container" style="grid-template-columns: 3fr 1fr;">
+                            <div class="field-group"><label>Nome do Item</label><input type="text" data-field="nome" value="${data.nome || ''}"></div>
+                            <div class="field-group"><label>Peso (kg)</label><input type="number" step="0.1" data-field="peso" value="${data.peso || 0}"></div>
+                        </div>
+                        <div style="margin-top:15px;"><div class="field-group"><label>Descrição/Espaços</label><textarea data-field="descricao">${data.descricao || ''}</textarea></div></div>
+                    `;
+                    break;
+                case 'habilidade':
+                    summaryHTML = `
+                        <span class="item-card-titulo">${data.nome || 'Nova Habilidade/Poder'}</span>
+                        <span></span>
+                        <button class="delete-btn" aria-label="Remover Habilidade/Poder">&times;</button>
+                    `;
+                    contentHTML = `
+                        <div class="grid-container">
+                            <div class="field-group"><label>Nome</label><input type="text" data-field="nome" value="${data.nome || ''}"></div>
+                        </div>
+                        <div style="margin-top:15px;"><div class="field-group"><label>Descrição</label><textarea data-field="descricao">${data.descricao || ''}</textarea></div></div>
+                    `;
+                    break;
+            }
+
+            card.innerHTML = `<summary>${summaryHTML}</summary><div class="item-card-content">${contentHTML}</div>`;
+            container.appendChild(card);
+        }
+
+        function atualizarSumario(input) {
+            const card = input.closest('.item-card');
+            if (!card) return;
+
+            const field = input.dataset.field;
+            const value = input.value;
+            const title = card.querySelector('.item-card-titulo');
+            const subtitles = card.querySelectorAll('.item-card-subtitulo');
+            
+            if (!title || !subtitles) return;
+
+            switch(card.dataset.type) {
+                case 'ataque':
+                    if (field === 'nome') title.textContent = value || 'Novo Ataque';
+                    if (field === 'dano' && subtitles[0]) subtitles[0].textContent = `Dano: ${value || 'N/A'}`;
+                    if (field === 'critico' && subtitles[1]) subtitles[1].textContent = `Crítico: ${value || 'N/A'}`;
+                    break;
+                case 'magia':
+                    if (field === 'nome') title.textContent = value || 'Nova Magia';
+                    if (field === 'custo' && subtitles[0]) subtitles[0].textContent = `Custo: ${value || 'N/A'} PM`;
+                    break;
+                case 'item':
+                    if (field === 'nome') title.textContent = value || 'Novo Item';
+                    if (field === 'peso' && subtitles[0]) subtitles[0].textContent = `Peso: ${value || 0}kg`;
+                    break;
+                case 'habilidade':
+                    if (field === 'nome') title.textContent = value || 'Nova Habilidade/Poder';
+                    break;
+            }
+        }
+
+        // --- EVENT HANDLERS ---
+        function handleDynamicListEvents(event) {
+            const target = event.target;
+
+            if (target.matches('.delete-btn')) {
+                const card = target.closest('.item-card');
+                const container = card?.parentElement;
+                card?.remove();
+                if (container?.id === 'lista-inventario') {
+                    atualizarCarga();
+                }
+            }
+
+            if (target.matches('input[data-field], textarea[data-field]')) {
+                atualizarSumario(target);
+                if (target.closest('#lista-inventario')) {
+                     atualizarCarga();
+                }
+            }
+        }
+
+        function handleTabClick(event) {
+            const clickedTab = event.currentTarget;
+            const targetPanelId = clickedTab.dataset.tab;
+
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+
+            clickedTab.classList.add('active');
+            document.getElementById(targetPanelId)?.classList.add('active');
+        }
+
+        function handleStatusControls(event) {
+            const target = event.target;
+            if (!target.matches('.bar-controls button')) return;
+
+            const { op, stat } = target.dataset;
+            const atuaisInput = document.getElementById(`${stat}_atuais`);
+            const maxInput = document.getElementById(`${stat}_max`);
+            
+            let atuais = parseInt(atuaisInput.value);
+            const max = parseInt(maxInput.value);
+
+            switch(op) {
+                case 'zero': atuais = 0; break;
+                case 'dec': atuais--; break;
+                case 'inc': atuais++; break;
+                case 'max': atuais = max; break;
+            }
+            atuaisInput.value = `${Math.max(0, atuais)}`;
+            atualizarBarrasStatus();
+        }
+
+        // --- MODAL LOGIC ---
+        function setupCreditsModal() {
+            const modal = document.getElementById('credits-modal');
+            const openBtn = document.getElementById('credits-btn');
+            const closeBtn = modal?.querySelector('.modal-close-btn');
+
+            if (!modal || !openBtn || !closeBtn) {
+                return;
+            }
+
+            const openModal = () => modal.classList.add('visible');
+            const closeModal = () => modal.classList.remove('visible');
+
+            openBtn.addEventListener('click', openModal);
+            closeBtn.addEventListener('click', closeModal);
+
+            modal.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    closeModal();
+                }
+            });
+
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && modal.classList.contains('visible')) {
+                    closeModal();
+                }
+            });
+        }
+
+        // --- MAIN LOGIC ---
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- ADD BUTTON EVENTS ---
+            document.getElementById('add-ataque-btn')?.addEventListener('click', () => criarItemDinamico('ataque', 'lista-ataques'));
+            document.getElementById('add-magia-btn')?.addEventListener('click', () => criarItemDinamico('magia', 'lista-magias'));
+            document.getElementById('add-item-btn')?.addEventListener('click', () => criarItemDinamico('item', 'lista-inventario'));
+            document.getElementById('add-habilidade-btn')?.addEventListener('click', () => criarItemDinamico('habilidade', 'lista-habilidades'));
+
+            // --- DYNAMIC LIST EVENTS (DELETION & UPDATE) ---
+            ['lista-ataques', 'lista-magias', 'lista-inventario', 'lista-habilidades'].forEach(id => {
+                const container = document.getElementById(id);
+                if (container) {
+                    container.addEventListener('click', handleDynamicListEvents);
+                    container.addEventListener('input', handleDynamicListEvents);
+                }
+            });
+
+            // --- TAB NAVIGATION ---
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', handleTabClick));
+            
+            // --- IMPORT/EXPORT FUNCTIONALITY ---
+            document.getElementById('exportar-btn')?.addEventListener('click', () => {
+                const dadosFicha = {
+                    campos: {},
+                    pericias: {},
+                    ataques: [],
+                    magias: [],
+                    inventario: [],
+                    habilidades: []
+                };
+
+                document.querySelectorAll('input[data-field], textarea[data-field]').forEach(el => {
+                    if (!el.closest('.item-card') && !el.closest('.pericias-table')) {
+                        dadosFicha.campos[el.dataset.field] = el.value;
+                    }
+                });
+                
+                document.querySelectorAll('#lista-pericias input').forEach(el => {
+                    dadosFicha.pericias[el.id] = el.value;
+                });
+
+                document.querySelectorAll('.item-card').forEach(card => {
+                    const itemData = { type: card.dataset.type };
+                    card.querySelectorAll('input, textarea').forEach(input => {
+                        if(input.dataset.field) {
+                            (itemData)[input.dataset.field] = input.value;
+                        }
+                    });
+                    if (itemData.type === 'ataque') dadosFicha.ataques.push(itemData);
+                    if (itemData.type === 'magia') dadosFicha.magias.push(itemData);
+                    if (itemData.type === 'item') dadosFicha.inventario.push(itemData);
+                    if (itemData.type === 'habilidade') dadosFicha.habilidades.push(itemData);
+                });
+
+                const dataStr = JSON.stringify(dadosFicha, null, 2);
+                const dataBlob = new Blob([dataStr], { type: 'application/json' });
+                const url = URL.createObjectURL(dataBlob);
+                const link = document.createElement('a');
+                const nomePersonagem = dadosFicha.campos.nome || 'personagem';
+                link.href = url;
+                link.download = `ficha_t20_${nomePersonagem.toLowerCase().replace(/\s/g, '_')}.json`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+            });
+
+            document.getElementById('importar-btn')?.addEventListener('click', () => document.getElementById('importar-input')?.click());
+            
+            document.getElementById('importar-input')?.addEventListener('change', (event) => {
+                const target = event.target;
+                const file = target.files?.[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const dadosFicha = JSON.parse(e.target.result);
+
+                        ['lista-ataques', 'lista-magias', 'lista-inventario', 'lista-habilidades'].forEach(id => {
+                            const el = document.getElementById(id);
+                            if (el) el.innerHTML = '';
+                        });
+
+                        Object.keys(dadosFicha.campos).forEach(key => {
+                            const selector = `[data-field="${key}"]`;
+                            const el = document.querySelector(selector);
+                            if (el && !el.closest('.item-card') && !el.closest('.pericias-table')) {
+                                el.value = dadosFicha.campos[key];
+                            }
+                        });
+                        
+                        Object.keys(dadosFicha.pericias).forEach(id => {
+                            const el = document.getElementById(id);
+                            if (el) el.value = dadosFicha.pericias[id];
+                        });
+
+                        dadosFicha.ataques?.forEach((data) => criarItemDinamico('ataque', 'lista-ataques', data));
+                        dadosFicha.magias?.forEach((data) => criarItemDinamico('magia', 'lista-magias', data));
+                        dadosFicha.inventario?.forEach((data) => criarItemDinamico('item', 'lista-inventario', data));
+                        dadosFicha.habilidades?.forEach((data) => criarItemDinamico('habilidade', 'lista-habilidades', data));
+                        
+                        atualizarModificadores();
+                        atualizarBarrasStatus();
+                        atualizarBarraXP();
+                        alert('Ficha importada com sucesso!');
+                    } catch (error) {
+                        alert('Erro ao importar o arquivo. Verifique se o formato é válido.');
+                        console.error("Erro no parse do JSON:", error);
+                    }
+                };
+                reader.readAsText(file);
+                target.value = '';
+            });
+
+            // --- AUTOMATIC UPDATE LISTENERS ---
+            document.getElementById('attributes-section')?.addEventListener('input', atualizarModificadores);
+            document.getElementById('pericias')?.addEventListener('input', atualizarTotaisPericias);
+            document.getElementById('status-section')?.addEventListener('input', atualizarBarrasStatus);
+            document.getElementById('xp-section')?.addEventListener('input', atualizarBarraXP);
+            document.getElementById('pv-status')?.addEventListener('click', handleStatusControls);
+            document.getElementById('pm-status')?.addEventListener('click', handleStatusControls);
+            document.getElementById('defesa')?.addEventListener('input', e => {
+                const input = e.target;
+                input.dataset.baseValue = input.value;
+                atualizarCarga();
+            });
+            document.getElementById('deslocamento')?.addEventListener('input', e => {
+                const input = e.target;
+                input.dataset.baseValue = input.value;
+                atualizarCarga();
+            });
+
+
+            // --- PAGE INITIALIZATION ---
+            gerarTabelaPericias();
+            atualizarModificadores();
+            atualizarBarrasStatus();
+            atualizarBarraXP();
+            setupCreditsModal();
+        });
+    </script>
+</body>
+</html>
