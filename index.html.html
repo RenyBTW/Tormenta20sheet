@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ficha de Personagem - Tormenta 20</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="sheet-container">
+        <!-- ===== LEFT PANE ===== -->
+        <aside class="left-pane">
+            <header class="character-header">
+                <div class="character-identifiers">
+                    <div class="field-group">
+                        <label for="nome">Personagem</label>
+                        <input type="text" id="nome" data-field="nome">
+                    </div>
+                    <div class="field-group">
+                        <label for="jogador">Jogador</label>
+                        <input type="text" id="jogador" data-field="jogador">
+                    </div>
+                    <div class="compound-field">
+                        <div class="field-group">
+                            <label for="classe">Classe</label>
+                            <input type="text" id="classe" data-field="classe">
+                        </div>
+                        <div class="field-group fixed-width">
+                            <label for="nivel">Nível</label>
+                            <input type="number" id="nivel" data-field="nivel" value="1">
+                        </div>
+                    </div>
+                    <div class="field-group">
+                        <label for="idade">Idade</label>
+                        <input type="number" id="idade" data-field="idade">
+                    </div>
+                    <div class="field-group">
+                        <label for="raca">Raça</label>
+                        <input type="text" id="raca" data-field="raca">
+                    </div>
+                    <div class="field-group">
+                        <label for="origem">Origem</label>
+                        <input type="text" id="origem" data-field="origem">
+                    </div>
+                     <div class="field-group">
+                        <label for="alinhamento">Alinhamento</label>
+                        <input type="text" id="alinhamento" data-field="alinhamento">
+                    </div>
+                     <div class="field-group">
+                        <label for="dinheiro">Dinheiro (T$)</label>
+                        <input type="text" id="dinheiro" data-field="dinheiro" value="0">
+                    </div>
+                </div>
+                 <div id="xp-section">
+                    <div class="field-group">
+                        <label>Pontos de Experiência (XP)</label>
+                        <div class="xp-inputs">
+                            <input type="number" id="xp_atual" data-field="xp_atual" value="0">
+                            <span>/</span>
+                            <input type="number" id="xp_prox_nivel" data-field="xp_prox_nivel" value="1000">
+                        </div>
+                    </div>
+                    <div class="xp-bar-container">
+                         <div id="xp-fill" class="bar-fill"></div>
+                         <div id="xp-text" class="bar-text">0 / 1000 XP</div>
+                    </div>
+                </div>
+            </header>
+
+            <section id="attributes-section">
+                <h2 class="section-title">Atributos</h2>
+                <div class="attributes-list">
+                    <div class="attribute-node" data-attr="for">
+                        <span class="modificador" id="mod-forca">+0</span>
+                        <label for="forca">Força</label>
+                        <input type="number" id="forca" value="10" data-field="forca">
+                    </div>
+                    <div class="attribute-node" data-attr="des">
+                        <span class="modificador" id="mod-destreza">+0</span>
+                        <label for="destreza">Destreza</label>
+                        <input type="number" id="destreza" value="10" data-field="destreza">
+                    </div>
+                    <div class="attribute-node" data-attr="con">
+                        <span class="modificador" id="mod-constituicao">+0</span>
+                        <label for="constituicao">Constituição</label>
+                        <input type="number" id="constituicao" value="10" data-field="constituicao">
+                    </div>
+                    <div class="attribute-node" data-attr="int">
+                        <span class="modificador" id="mod-inteligencia">+0</span>
+                        <label for="inteligencia">Inteligência</label>
+                        <input type="number" id="inteligencia" value="10" data-field="inteligencia">
+                    </div>
+                    <div class="attribute-node" data-attr="sab">
+                        <span class="modificador" id="mod-sabedoria">+0</span>
+                        <label for="sabedoria">Sabedoria</label>
+                        <input type="number" id="sabedoria" value="10" data-field="sabedoria">
+                    </div>
+                    <div class="attribute-node" data-attr="car">
+                        <span class="modificador" id="mod-carisma">+0</span>
+                        <label for="carisma">Carisma</label>
+                        <input type="number" id="carisma" value="10" data-field="carisma">
+                    </div>
+                </div>
+            </section>
+
+            <section class="status-section">
+                <div class="vitals-grid">
+                     <div class="field-group">
+                        <label for="divindade">Divindade</label>
+                        <input type="text" id="divindade" value="" data-field="divindade" class="status-input">
+                    </div>
+                    <div class="field-group">
+                        <label for="defesa">Defesa</label>
+                        <input type="number" id="defesa" value="10" data-field="defesa" class="status-input">
+                    </div>
+                     <div class="field-group">
+                        <label for="deslocamento">Deslocamento</label>
+                        <input type="text" id="deslocamento" value="9m" data-field="deslocamento" class="status-input">
+                    </div>
+                </div>
+
+                <div class="status-bar" id="pv-status">
+                    <label>Pontos de Vida</label>
+                    <div class="bar-container">
+                        <div class="bar-bg">
+                            <div id="pv-fill" class="bar-fill"></div>
+                        </div>
+                        <div class="bar-text">
+                            <input type="number" id="pv_atuais" value="10" data-field="pv_atuais">
+                            <span>/</span>
+                            <input type="number" id="pv_max" value="10" data-field="pv_max">
+                        </div>
+                    </div>
+                    <div class="bar-controls">
+                        <button data-op="zero" data-stat="pv">&laquo;</button>
+                        <button data-op="dec" data-stat="pv">&lsaquo;</button>
+                        <button data-op="inc" data-stat="pv">&rsaquo;</button>
+                        <button data-op="max" data-stat="pv">&raquo;</button>
+                    </div>
+                </div>
+
+                <div class="status-bar" id="pm-status">
+                    <label>Pontos de Mana</label>
+                    <div class="bar-container">
+                        <div class="bar-bg">
+                            <div id="pm-fill" class="bar-fill"></div>
+                        </div>
+                        <div class="bar-text">
+                            <input type="number" id="pm_atuais" value="5" data-field="pm_atuais">
+                            <span>/</span>
+                            <input type="number" id="pm_max" value="5" data-field="pm_max">
+                        </div>
+                    </div>
+                    <div class="bar-controls">
+                        <button data-op="zero" data-stat="pm">&laquo;</button>
+                        <button data-op="dec" data-stat="pm">&lsaquo;</button>
+                        <button data-op="inc" data-stat="pm">&rsaquo;</button>
+                        <button data-op="max" data-stat="pm">&raquo;</button>
+                    </div>
+                </div>
+            </section>
+        </aside>
+
+        <!-- ===== RIGHT PANE ===== -->
+        <main class="right-pane">
+            <header class="right-header">
+                <div class="actions">
+                    <button id="importar-btn" class="action-btn" title="Importar Ficha">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                    </button>
+                    <button id="exportar-btn" class="action-btn" title="Exportar Ficha">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5z"/></svg>
+                    </button>
+                    <input type="file" id="importar-input" accept=".json">
+                </div>
+            </header>
+            
+            <nav class="tabs">
+                <button class="tab-btn active" data-tab="pericias">Perícias</button>
+                <button class="tab-btn" data-tab="notas">Notas</button>
+                <button class="tab-btn" data-tab="habilidades">Habilidades e Poderes</button>
+                <button class="tab-btn" data-tab="combate">Combate</button>
+                <button class="tab-btn" data-tab="magias">Magias</button>
+                <button class="tab-btn" data-tab="inventario">Inventário</button>
+            </nav>
+
+            <div class="tab-content">
+                <div id="pericias" class="tab-panel active">
+                    <table class="pericias-table">
+                        <thead>
+                            <tr>
+                                <th>Perícia</th>
+                                <th>Total</th>
+                                <th>Bônus Attr.</th>
+                                <th>Treino</th>
+                                <th>Outros</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista-pericias">
+                            <!-- Gerado por JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="notas" class="tab-panel">
+                    <div class="notes-container">
+                        <div class="field-group full-width">
+                            <label for="anotacoes">Anotações</label>
+                            <textarea id="anotacoes" data-field="anotacoes" rows="8"></textarea>
+                        </div>
+                        <div class="field-group">
+                            <label for="aparencia">Aparência</label>
+                            <textarea id="aparencia" data-field="aparencia" rows="6"></textarea>
+                        </div>
+                        <div class="field-group">
+                            <label for="personalidade">Personalidade</label>
+                            <textarea id="personalidade" data-field="personalidade" rows="6"></textarea>
+                        </div>
+                        <div class="field-group full-width">
+                            <label for="historico">Histórico</label>
+                            <textarea id="historico" data-field="historico" rows="8"></textarea>
+                        </div>
+                        <div class="field-group full-width">
+                            <label for="objetivo">Objetivo</label>
+                            <textarea id="objetivo" data-field="objetivo" rows="4"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="habilidades" class="tab-panel">
+                    <div id="lista-habilidades" class="lista-dinamica-container"></div>
+                    <button id="add-habilidade-btn" class="add-btn">+ Nova Habilidade/Poder</button>
+                </div>
+
+                <div id="combate" class="tab-panel">
+                    <div id="lista-ataques" class="lista-dinamica-container"></div>
+                    <button id="add-ataque-btn" class="add-btn">+ Novo Ataque</button>
+                </div>
+
+                <div id="magias" class="tab-panel">
+                    <div id="lista-magias" class="lista-dinamica-container"></div>
+                    <button id="add-magia-btn" class="add-btn">+ Nova Magia</button>
+                </div>
+
+                <div id="inventario" class="tab-panel">
+                    <div id="carga-container">
+                        <div class="carga-info">
+                            <span>Carga Atual: <strong id="carga-atual">0kg</strong></span>
+                            <span>Carga Normal: <strong id="carga-normal">30kg</strong></span>
+                            <span>Carga Máxima: <strong id="carga-maxima">100kg</strong></span>
+                        </div>
+                        <div class="carga-bar-wrapper">
+                            <div id="carga-fill" class="carga-fill"></div>
+                        </div>
+                        <div id="carga-penalidade" class="carga-penalidade-aviso" style="display: none;">
+                            <strong>Carga Pesada:</strong> Penalidade de Armadura –2, Deslocamento –3m.
+                        </div>
+                    </div>
+                    <div id="lista-inventario" class="lista-dinamica-container"></div>
+                    <button id="add-item-btn" class="add-btn">+ Novo Item</button>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <div id="credits-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close-btn" aria-label="Fechar Créditos">&times;</button>
+            <h2>Créditos</h2>
+            <div class="credits-category">
+                <h3>Criador</h3>
+                <div class="contributors-container">
+                    <div class="contributor">
+                        <img src="https://static.wikia.nocookie.net/deltarune/images/d/d4/Berdly_face.png/revision/latest/scale-to-width/360?cb=20210928112118" class="contributor-avatar" alt="Avatar de Riky">
+                        <span class="contributor-name">Riky</span>
+                    </div>
+                </div>
+            </div>
+            <div class="credits-category">
+                <h3>Beta Testers</h3>
+                <div class="contributors-container">
+                    <div class="contributor">
+                        <img src="data:image/webp;base64,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" class="contributor-avatar" alt="Avatar de OkehMauree">
+                        <span class="contributor-name">OkehMauree</span>
+                    </div>
+                    <div class="contributor">
+                        <img src="data:image/webp;base64,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" class="contributor-avatar" alt="Avatar de L0st">
+                        <span class="contributor-name">L0st</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="page-footer">
+        <button id="credits-btn" class="credits-link">Créditos</button>
+    </footer>
+
+    <script src="script.js" defer></script>
+</body>
+</html>
